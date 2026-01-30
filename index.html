@@ -1,35 +1,30 @@
 <!DOCTYPE html>
-<html lang="it">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accesso Riservato</title>
+    <title>Accesso</title>
     <style>
-        body { font-family: sans-serif; display: flex; justify-content: center; padding: 50px; background: #f4f4f4; }
-        .box { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 300px; }
+        body { font-family: sans-serif; display: flex; justify-content: center; padding-top: 100px; background: #1a1a1a; color: white; }
+        .box { background: #2a2a2a; padding: 30px; border-radius: 12px; width: 320px; text-align: center; }
         .hidden { display: none; }
-        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        button { width: 100%; padding: 10px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
-        button:hover { background: #0056b3; }
-        a { font-size: 0.8em; color: #666; text-decoration: none; display: block; margin-top: 10px; text-align: center; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 6px; border: none; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #e50914; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        a { color: #aaa; font-size: 0.8em; text-decoration: none; display: block; margin-top: 15px; }
     </style>
 </head>
 <body>
-
     <div class="box">
         <div id="step-mail">
             <h3>BENVENUTO</h3>
-            <input type="email" id="email" placeholder="Inserisci Email">
+            <input type="email" id="email" placeholder="Email">
             <button onclick="checkEmail()">Continua</button>
         </div>
-
         <div id="step-login" class="hidden">
             <h3>LOGIN</h3>
             <input type="password" id="login-pass" placeholder="Password">
             <button onclick="login()">Entra</button>
-            <a href="#" onclick="mostraReset()">Password dimenticata?</a>
+            <a href="#" onclick="showStep('step-reset')">Password dimenticata?</a>
         </div>
-
         <div id="step-reset" class="hidden">
             <h3>IMPOSTA PASSWORD</h3>
             <input type="password" id="new-pass" placeholder="Nuova Password">
@@ -39,50 +34,43 @@
     </div>
 
     <script>
-        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxFA5BTXV7q6i9ZZfAftM-dw5zHYv3H8mAsLHPj4h1MTry-77SrDZsW7M5nBi6pahCyWQ/exec"; // <--- METTI IL TUO URL QUI!
-        let userEmail = "";
-        let securityToken = "";
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbymyNgsOrOWmXh4uJ-DzQ5U324IDHCnhN9_P6suw-Z-9O4tct1Zfw-DG7RG_evbiYXJrQ/exec"; 
+        let userEmail = "", securityToken = "";
 
         function showStep(id) {
-            document.getElementById('step-mail').classList.add('hidden');
-            document.getElementById('step-login').classList.add('hidden');
-            document.getElementById('step-reset').classList.add('hidden');
+            ['step-mail', 'step-login', 'step-reset'].forEach(s => document.getElementById(s).classList.add('hidden'));
             document.getElementById(id).classList.remove('hidden');
         }
 
         async function checkEmail() {
             userEmail = document.getElementById('email').value.trim();
-            if(!userEmail) return alert("Metti la mail");
-            
             const res = await fetch(`${WEB_APP_URL}?action=subscribe&user_email=${userEmail}`, { method: 'POST' });
             const text = await res.text();
             const [stato, token] = text.split("|");
             securityToken = token;
-            
-            if(stato === "VAI_A_LOGIN") showStep('step-login');
-            else showStep('step-reset');
+            showStep(stato === "VAI_A_LOGIN" ? 'step-login' : 'step-reset');
         }
 
         async function login() {
             const pass = document.getElementById('login-pass').value;
             const res = await fetch(`${WEB_APP_URL}?action=login&user_email=${userEmail}&user_password=${pass}`, { method: 'POST' });
             const text = await res.text();
-            if(text.includes("OK")) window.location.href = "dashboard.html";
-            else alert("Password errata!");
+            if(text.includes("OK")) {
+                localStorage.setItem('userStatus', text.split("|")[1]);
+                window.location.href = "dashboard.html";
+            } else alert("Password errata!");
         }
 
         async function updatePassword() {
             const p1 = document.getElementById('new-pass').value;
-            const p2 = document.getElementById('conf-pass').value;
-            if(p1 !== p2) return alert("Le password non coincidono");
-
+            if(p1 !== document.getElementById('conf-pass').value) return alert("No match");
             const res = await fetch(`${WEB_APP_URL}?action=update&token=${securityToken}&new_password=${p1}`, { method: 'POST' });
             const text = await res.text();
-            if(text.includes("OK")) window.location.href = "dashboard.html";
-            else alert("Errore token: " + text);
+            if(text.includes("OK")) {
+                localStorage.setItem('userStatus', text.split("|")[1]);
+                window.location.href = "dashboard.html";
+            } else alert("Errore");
         }
-
-        function mostraReset() { showStep('step-reset'); }
     </script>
 </body>
 </html>
