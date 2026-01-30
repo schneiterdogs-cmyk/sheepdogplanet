@@ -47,10 +47,16 @@ function gestisciNewsletter(event) {
         if (comando === "VAI_A_LOGIN") {
             cambiaBox('login-section'); 
         } else if (comando === "VAI_A_RESET") {
-            if (token) {
-                const tknInput = document.getElementById('token_input');
-                if(tknInput) tknInput.value = token;
-            }
+    if (token) {
+        // ASSICURATI CHE QUESTE RIGHE SIANO ESATTAMENTE COSÌ
+        const tknInput = document.getElementById('token_input');
+        if (tknInput) {
+            tknInput.value = token; // Questo "incolla" il token segreto nel modulo
+            console.log("Token caricato con successo:", token);
+        }
+    }
+    cambiaBox('reset-section'); 
+}
             cambiaBox('reset-section'); 
         }
     })
