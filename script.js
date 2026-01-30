@@ -135,4 +135,3 @@ document.getElementById('resetForm').onsubmit = function(e) {
             alert("Errore: " + risposta);
             cambiaBox('login-section');
         }
-    })
