@@ -50,31 +50,41 @@ function gestisciNewsletter(event) {
     .catch(err => console.error("Errore Newsletter:", err));
 }
 
-// 3. GESTIONE LOGIN
+// 3. GESTIONE LOGIN (Corretta per utenti già registrati)
 document.getElementById('loginForm').onsubmit = function(e) {
     e.preventDefault();
+    console.log("Login in corso...");
+
     const formData = new FormData(this);
     formData.append('action', 'login');
-    const emailSalvata = document.querySelector('input[name="user_email"]').value;
-    formData.append('user_email', emailSalvata);
+    
+    // IMPORTANTE: Recuperiamo la mail che l'utente ha inserito nel PRIMO box
+    // Se l'input della newsletter si chiama 'user_email', lo prendiamo da lì
+    const emailNewsletter = document.querySelector('input[name="user_email"]').value;
+    formData.append('user_email', emailNewsletter);
 
     fetch(CONFIG.URL_SHEETS, {
         method: 'POST',
-        mode: 'cors',      // AGGIUNTO PER SICUREZZA
-        redirect: 'follow', // AGGIUNTO PER SICUREZZA
+        mode: 'cors',
+        redirect: 'follow',
         body: formData
     })
     .then(res => res.text())
     .then(risposta => {
+        console.log("Risposta Login:", risposta); // Controlla cosa dice Google in console
+        
         if (risposta.includes("OK")) {
-            const status = risposta.split("|")[1];
+            const status = risposta.split("|")[1] || 'free';
             localStorage.setItem('userStatus', status);
+            localStorage.setItem('isLoggedIn', 'true'); // Segniamo che è dentro
+            
             window.location.href = "dashboard.html";
         } else {
-            alert("CREDENTIALS ERRATE");
+            // Se la password è sbagliata o l'email non corrisponde
+            alert("ERRORE: " + risposta.split("|")[1] || "Credenziali errate");
         }
     })
-    .catch(err => console.error("Errore Login:", err));
+    .catch(err => console.error("Errore critico Login:", err));
 };
 
 // 4. SALVATAGGIO NUOVA PASSWORD
