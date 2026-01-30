@@ -3,119 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Area Accesso</title>
+    <title>Accesso Riservato</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; padding-top: 80px; background: #121212; color: white; }
-        .box { background: #1e1e1e; padding: 40px; border-radius: 15px; width: 340px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #121212; color: white; display: flex; justify-content: center; padding-top: 100px; }
+        .box { background: #1e1e1e; padding: 30px; border-radius: 12px; width: 320px; text-align: center; box-shadow: 0 8px 20px rgba(0,0,0,0.4); }
         .hidden { display: none; }
-        input { width: 100%; padding: 12px; margin: 12px 0; border-radius: 8px; border: 1px solid #333; background: #2b2b2b; color: white; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; background: #007bff; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; }
-        button:hover { background: #0056b3; }
-        a { color: #888; font-size: 0.85em; text-decoration: none; display: block; margin-top: 15px; }
-        #loader { font-size: 0.9em; color: #007bff; margin-top: 10px; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 6px; border: 1px solid #333; background: #2b2b2b; color: white; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #e50914; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 10px; }
+        button:disabled { background: #555; }
+        .msg { font-size: 0.9em; color: #aaa; margin-bottom: 15px; }
+        a { color: #888; font-size: 0.8em; text-decoration: none; display: block; margin-top: 15px; }
     </style>
 </head>
 <body>
 
-    <div class="box">
-        <div id="step-mail">
-            <h3>BENVENUTO</h3>
-            <p style="color:#aaa; font-size:0.9em;">Inserisci la tua email per iniziare</p>
-            <input type="email" id="email" placeholder="esempio@mail.it">
-            <button id="btn-mail" onclick="checkEmail()">Continua</button>
-            <div id="loader" class="hidden">Verifica in corso...</div>
-        </div>
-
-        <div id="step-login" class="hidden">
-            <h3>BENTORNATO</h3>
-            <input type="password" id="login-pass" placeholder="Tua Password">
-            <button onclick="login()">Accedi</button>
-            <a href="#" onclick="showStep('step-reset')">Hai dimenticato la password?</a>
-        </div>
-
-        <div id="step-reset" class="hidden">
-            <h3>IMPOSTA PASSWORD</h3>
-            <p style="color:#aaa; font-size:0.8em;">Crea una password per il tuo account</p>
-            <input type="password" id="new-pass" placeholder="Nuova Password">
-            <input type="password" id="conf-pass" placeholder="Conferma Password">
-            <button onclick="updatePassword()">Salva e Accedi</button>
-        </div>
+<div class="box">
+    <div id="step-mail">
+        <h3>ACCESSO</h3>
+        <p class="msg">Inserisci la tua mail per continuare</p>
+        <input type="email" id="email" placeholder="nome@esempio.it">
+        <button id="btn-mail" onclick="checkEmail()">Continua</button>
     </div>
 
-    <script>
-        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzw2jlOh59U1PBflHz_6oJWWAdqy5G83PD4yw6a9kpiplDWEiOL0zyyWbi579s23kRQvw/exec"; // <--- INCOLLA QUI IL TUO URL!
-        let userEmail = "";
-        let securityToken = "";
+    <div id="step-login" class="hidden">
+        <h3>BENTORNATO</h3>
+        <p class="msg" id="display-mail"></p>
+        <input type="password" id="login-pass" placeholder="Password">
+        <button onclick="login()">Accedi</button>
+        <a href="#" onclick="alert('Ti abbiamo inviato un nuovo link via email!'); checkEmail();">Hai dimenticato la password?</a>
+    </div>
 
-        function showStep(id) {
-            ['step-mail', 'step-login', 'step-reset'].forEach(s => document.getElementById(s).classList.add('hidden'));
-            document.getElementById(id).classList.remove('hidden');
+    <div id="step-reset" class="hidden">
+        <h3>CONFIGURA ACCOUNT</h3>
+        <p class="msg">Imposta la tua password di accesso</p>
+        <input type="password" id="new-pass" placeholder="Nuova Password">
+        <input type="password" id="conf-pass" placeholder="Conferma Password">
+        <button onclick="updatePassword()">Salva e Inizia</button>
+    </div>
+
+    <div id="loader" class="hidden" style="margin-top:15px; color:#e50914;">Attendi...</div>
+</div>
+
+<script>
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzcBNZ1QtLFBYbNxomx-hn_t-2wtVJnGubN9Hbt-BRsiQFFXVqJamGsJ0a5RD7IfZuKBQ/exec"; 
+    let userEmail = "";
+    let securityToken = "";
+
+    // GESTIONE AUTOMATICA LINK EMAIL
+    window.onload = function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const tokenInUrl = urlParams.get('token');
+        if (tokenInUrl) {
+            securityToken = tokenInUrl;
+            showStep('step-reset');
         }
+    }
 
-        // FUNZIONE CONTROLLO EMAIL CON REGEX
-        async function checkEmail() {
-            const emailInput = document.getElementById('email');
-            const loader = document.getElementById('loader');
-            userEmail = emailInput.value.trim().toLowerCase();
+    function showStep(id) {
+        ['step-mail', 'step-login', 'step-reset'].forEach(s => document.getElementById(s).classList.add('hidden'));
+        document.getElementById(id).classList.remove('hidden');
+    }
 
-            // Controllo validità email (deve avere @ e un punto dopo)
-            const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    async function checkEmail() {
+        const emailInput = document.getElementById('email');
+        userEmail = emailInput.value.trim().toLowerCase();
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-            if (!userEmail || !regexEmail.test(userEmail)) {
-                alert("Inserisci un indirizzo email valido!");
-                emailInput.focus();
-                return;
-            }
+        if (!regex.test(userEmail)) return alert("Inserisci una email valida!");
 
-            loader.classList.remove('hidden');
-            document.getElementById('btn-mail').disabled = true;
+        toggleLoader(true);
+        try {
+            const res = await fetch(`${WEB_APP_URL}?action=subscribe&user_email=${userEmail}`, { method: 'POST' });
+            const text = await res.text();
 
-            try {
-                const res = await fetch(`${WEB_APP_URL}?action=subscribe&user_email=${userEmail}`, { method: 'POST' });
-                const text = await res.text();
+            if (text === "EMAIL_INVIATA") {
+                alert("Ti abbiamo inviato un link via email. Cliccalo per creare la tua password!");
+                emailInput.value = "";
+            } else {
                 const [stato, token] = text.split("|");
                 securityToken = token;
-                
+                document.getElementById('display-mail').innerText = userEmail;
                 showStep(stato === "VAI_A_LOGIN" ? 'step-login' : 'step-reset');
-            } catch (err) {
-                alert("Errore di connessione. Riprova.");
-            } finally {
-                loader.classList.add('hidden');
-                document.getElementById('btn-mail').disabled = false;
             }
+        } catch (e) { alert("Errore di rete"); }
+        toggleLoader(false);
+    }
+
+    async function login() {
+        const pass = document.getElementById('login-pass').value;
+        toggleLoader(true);
+        const res = await fetch(`${WEB_APP_URL}?action=login&user_email=${userEmail}&user_password=${pass}`, { method: 'POST' });
+        const text = await res.text();
+        if(text.includes("OK")) {
+            localStorage.setItem('userStatus', text.split("|")[1]);
+            window.location.href = "dashboard.html";
+        } else {
+            alert("Password errata!");
         }
+        toggleLoader(false);
+    }
 
-        async function login() {
-            const pass = document.getElementById('login-pass').value;
-            if(!pass) return alert("Inserisci la password");
+    async function updatePassword() {
+        const p1 = document.getElementById('new-pass').value;
+        if(p1 !== document.getElementById('conf-pass').value) return alert("Le password non corrispondono!");
+        if(p1.length < 4) return alert("Password troppo corta!");
 
-            const res = await fetch(`${WEB_APP_URL}?action=login&user_email=${userEmail}&user_password=${pass}`, { method: 'POST' });
-            const text = await res.text();
-            
-            if(text.includes("OK")) {
-                localStorage.setItem('userStatus', text.split("|")[1]);
-                window.location.href = "dashboard.html";
-            } else {
-                alert("Password errata!");
-            }
+        toggleLoader(true);
+        const res = await fetch(`${WEB_APP_URL}?action=update&token=${securityToken}&new_password=${p1}`, { method: 'POST' });
+        const text = await res.text();
+        if(text.includes("OK")) {
+            localStorage.setItem('userStatus', text.split("|")[1]);
+            window.location.href = "dashboard.html";
+        } else {
+            alert("Link scaduto o non valido.");
         }
+        toggleLoader(false);
+    }
 
-        async function updatePassword() {
-            const p1 = document.getElementById('new-pass').value;
-            const p2 = document.getElementById('conf-pass').value;
-            if (p1.length < 4) return alert("Password troppo corta (min 4 caratteri)");
-            if (p1 !== p2) return alert("Le password non coincidono!");
+    function toggleLoader(show) {
+        document.getElementById('loader').classList.toggle('hidden', !show);
+        document.querySelectorAll('button').forEach(b => b.disabled = show);
+    }
+</script>
 
-            const res = await fetch(`${WEB_APP_URL}?action=update&token=${securityToken}&new_password=${p1}`, { method: 'POST' });
-            const text = await res.text();
-            
-            if(text.includes("OK")) {
-                localStorage.setItem('userStatus', text.split("|")[1]);
-                window.location.href = "dashboard.html";
-            } else {
-                alert("Errore durante il salvataggio.");
-            }
-        }
-    </script>
 </body>
 </html>
