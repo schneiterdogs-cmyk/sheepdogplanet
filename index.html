@@ -7,13 +7,14 @@
 </head>
 <body>
 
-    <div id="newsletter-section" class="newsletter-box">
-        <h3>PLANET JOIN</h3>
-        <form action="/salva-email" method="POST">
-            <input type="email" id="email" name="user_email" placeholder="sheep@gmail.com" required>
-            <button type="submit">Continue</button>
-        </form>
-    </div>
+    <div class="newsletter-box">
+    <h3>PLANET JOIN</h3>
+    <form>
+        <input type="hidden" name="action" value="subscribe">
+        <input type="email" name="user_email" placeholder="sheep@gmail.com" required>
+        <button type="submit">Continue</button>
+    </form>
+</div>
 
     <div id="login-section" class="login-box hidden">
         <h3>AREA RISERVATA</h3>
