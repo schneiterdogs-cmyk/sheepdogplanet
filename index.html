@@ -1,26 +1,88 @@
-<div id="newsletter-section" class="box">
-    <h3>BENVENUTO</h3>
-    <form id="newsletterForm">
-        <input type="email" name="user_email" placeholder="Email" required>
-        <button type="submit">Continua</button>
-    </form>
-</div>
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accesso Riservato</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; padding: 50px; background: #f4f4f4; }
+        .box { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 300px; }
+        .hidden { display: none; }
+        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        a { font-size: 0.8em; color: #666; text-decoration: none; display: block; margin-top: 10px; text-align: center; }
+    </style>
+</head>
+<body>
 
-<div id="login-section" class="box hidden">
-    <h3>LOGIN</h3>
-    <form id="loginForm">
-        <input type="password" id="pass" placeholder="Password" required>
-        <button type="submit">Entra</button>
-        <p><a href="#" onclick="cambiaBox('reset-section')">Dimenticata?</a></p>
-    </form>
-</div>
+    <div class="box">
+        <div id="step-mail">
+            <h3>BENVENUTO</h3>
+            <input type="email" id="email" placeholder="Inserisci Email">
+            <button onclick="checkEmail()">Continua</button>
+        </div>
 
-<div id="reset-section" class="box hidden">
-    <h3>RESET PASSWORD</h3>
-    <form id="resetForm">
-        <input type="hidden" id="token_input">
-        <input type="password" id="new_pass" placeholder="Nuova Password" required>
-        <input type="password" id="conf_pass" placeholder="Conferma" required>
-        <button type="submit">Salva</button>
-    </form>
-</div>
+        <div id="step-login" class="hidden">
+            <h3>LOGIN</h3>
+            <input type="password" id="login-pass" placeholder="Password">
+            <button onclick="login()">Entra</button>
+            <a href="#" onclick="mostraReset()">Password dimenticata?</a>
+        </div>
+
+        <div id="step-reset" class="hidden">
+            <h3>IMPOSTA PASSWORD</h3>
+            <input type="password" id="new-pass" placeholder="Nuova Password">
+            <input type="password" id="conf-pass" placeholder="Conferma Password">
+            <button onclick="updatePassword()">Salva ed Entra</button>
+        </div>
+    </div>
+
+    <script>
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxFA5BTXV7q6i9ZZfAftM-dw5zHYv3H8mAsLHPj4h1MTry-77SrDZsW7M5nBi6pahCyWQ/exec"; // <--- METTI IL TUO URL QUI!
+        let userEmail = "";
+        let securityToken = "";
+
+        function showStep(id) {
+            document.getElementById('step-mail').classList.add('hidden');
+            document.getElementById('step-login').classList.add('hidden');
+            document.getElementById('step-reset').classList.add('hidden');
+            document.getElementById(id).classList.remove('hidden');
+        }
+
+        async function checkEmail() {
+            userEmail = document.getElementById('email').value.trim();
+            if(!userEmail) return alert("Metti la mail");
+            
+            const res = await fetch(`${WEB_APP_URL}?action=subscribe&user_email=${userEmail}`, { method: 'POST' });
+            const text = await res.text();
+            const [stato, token] = text.split("|");
+            securityToken = token;
+            
+            if(stato === "VAI_A_LOGIN") showStep('step-login');
+            else showStep('step-reset');
+        }
+
+        async function login() {
+            const pass = document.getElementById('login-pass').value;
+            const res = await fetch(`${WEB_APP_URL}?action=login&user_email=${userEmail}&user_password=${pass}`, { method: 'POST' });
+            const text = await res.text();
+            if(text.includes("OK")) window.location.href = "dashboard.html";
+            else alert("Password errata!");
+        }
+
+        async function updatePassword() {
+            const p1 = document.getElementById('new-pass').value;
+            const p2 = document.getElementById('conf-pass').value;
+            if(p1 !== p2) return alert("Le password non coincidono");
+
+            const res = await fetch(`${WEB_APP_URL}?action=update&token=${securityToken}&new_password=${p1}`, { method: 'POST' });
+            const text = await res.text();
+            if(text.includes("OK")) window.location.href = "dashboard.html";
+            else alert("Errore token: " + text);
+        }
+
+        function mostraReset() { showStep('step-reset'); }
+    </script>
+</body>
+</html>
