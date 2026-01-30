@@ -116,9 +116,23 @@ document.getElementById('resetForm').onsubmit = function(e) {
     })
     .then(res => res.text())
     .then(risposta => {
-        console.log("Risposta salvataggio:", risposta);
-        alert("Password impostata! Ora effettua il login.");
-        cambiaBox('login-section');
+        console.log("Risposta Google:", risposta);
+        
+        // Se la risposta contiene PASSWORD_OK (anche se c'è lo status tipo PASSWORD_OK|free)
+        if (risposta.includes("PASSWORD_OK")) {
+            const parti = risposta.split("|");
+            const status = parti[1] || 'free';
+
+            // Salviamo lo stato così la dashboard sa chi siamo
+            localStorage.setItem('userStatus', status);
+            
+            alert("Password salvata! Accesso in corso...");
+            
+            // IL SALTO FINALE:
+            window.location.href = "dashboard.html"; 
+        } else {
+            // Se qualcosa va storto (es. token scaduto), allora torna al login
+            alert("Errore: " + risposta);
+            cambiaBox('login-section');
+        }
     })
-    .catch(err => console.error("Errore Reset:", err));
-};
