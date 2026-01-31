@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>I Miei Cani - Sheepdog DB</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #111; color: white; margin: 0; padding: 15px; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .btn-add { background: #4CAF50; color: white; padding: 10px 15px; border-radius: 10px; text-decoration: none; font-size: 14px; font-weight: bold; }
+        
+        /* Card Cane */
+        .dog-card { background: #1a1a1a; border-radius: 15px; padding: 15px; margin-bottom: 15px; border: 1px solid #333; display: flex; align-items: center; gap: 15px; }
+        .dog-img { width: 60px; height: 60px; border-radius: 10px; object-fit: cover; background: #333; }
+        .dog-info { flex: 1; }
+        .dog-info h4 { margin: 0; font-size: 16px; color: #FF9800; }
+        .dog-info p { margin: 3px 0; font-size: 12px; color: #777; }
+
+        /* Azioni */
+        .actions { display: flex; gap: 8px; }
+        .btn-icon { width: 35px; height: 35px; border-radius: 8px; display: flex; align-items: center; justify-content: center; background: #222; color: white; border: 1px solid #444; text-decoration: none; font-size: 14px; }
+        .btn-qr { color: #FF9800; border-color: #FF9800; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h2>I Miei Cani</h2>
+    <a href="register-dog.html" class="btn-add">+ AGGIUNGI</a>
+</div>
+
+<div id="dogList">
+    <div class="dog-card">
+        <img src="https://via.placeholder.com/100" class="dog-img">
+        <div class="dog-info">
+            <h4>Roy</h4>
+            <p>ISDS IT/354210</p>
+            <p><span style="color: #4CAF50;">●</span> Stallone Attivo</p>
+        </div>
+        <div class="actions">
+            <a href="#" class="btn-icon btn-qr" title="Scarica QR"><i class="fas fa-qrcode"></i></a>
+            <a href="dog-profile.html" class="btn-icon"><i class="fas fa-eye"></i></a>
+            <a href="#" class="btn-icon"><i class="fas fa-edit"></i></a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
