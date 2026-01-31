@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accesso</title>
+    <title>SHEEPDOGS PLANET</title>
     <style>
         body { font-family: sans-serif; background: #121212; color: white; display: flex; justify-content: center; padding-top: 80px; }
         .box { background: #1e1e1e; padding: 30px; border-radius: 12px; width: 320px; text-align: center; }
@@ -18,27 +18,27 @@
 
 <div class="box">
     <div id="step-mail">
-        <h3>BENVENUTO</h3>
+        <h3>WELCOME</h3>
         <input type="email" id="email" placeholder="Email">
-        <button onclick="checkEmail()">Continua</button>
+        <button onclick="checkEmail()">Continue</button>
     </div>
 
     <div id="step-login" class="hidden">
         <h3>LOGIN</h3>
         <p id="display-mail" class="msg"></p>
         <input type="password" id="login-pass" placeholder="Password">
-        <button onclick="login()">Entra</button>
-        <span class="link-alt" onclick="forgotPassword()">Password dimenticata?</span>
+        <button onclick="login()">Entry</button>
+        <span class="link-alt" onclick="forgotPassword()">Forgot Password</span>
     </div>
 
     <div id="step-reset" class="hidden">
-        <h3>NUOVA PASSWORD</h3>
+        <h3>NEW PASSWORD</h3>
         <input type="password" id="new-pass" placeholder="Password">
         <input type="password" id="conf-pass" placeholder="Conferma">
         <button onclick="updatePassword()">Salva e Accedi</button>
     </div>
 
-    <div id="loader" class="hidden" style="margin-top:15px; color:#e50914;">Attendi...</div>
+    <div id="loader" class="hidden" style="margin-top:15px; color:#e50914;">bmx...</div>
 </div>
 
 <script>
