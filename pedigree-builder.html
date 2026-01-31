@@ -2,89 +2,92 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Pedigree Creator & COI - Sheepdog DB</title>
+    <title>Analisi Pedigree - Sheepdog DB</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { font-family: sans-serif; background: #111; color: white; margin: 0; padding: 15px; }
-        .header { text-align: center; padding: 20px 0; border-bottom: 1px solid #333; }
-        .header h2 { color: #4CAF50; margin: 0; }
+        body { font-family: 'Segoe UI', sans-serif; background: #111; color: white; margin: 0; padding: 15px; }
+        .analyzer-header { background: #222; padding: 20px; border-radius: 15px; margin-bottom: 20px; text-align: center; border: 1px solid #333; }
         
-        /* Box Risultati Scientifici */
-        .stats-container { display: flex; gap: 15px; margin: 20px 0; }
-        .stat-card { flex: 1; background: #222; padding: 15px; border-radius: 12px; text-align: center; border-bottom: 4px solid #4CAF50; }
-        .stat-card h3 { margin: 0; font-size: 24px; color: #fff; }
-        .stat-card span { font-size: 11px; color: #888; text-transform: uppercase; }
-        .high-risk { border-color: #f44336 !important; }
+        /* Stats Scientifiche */
+        .stats-grid { display: flex; gap: 10px; margin-bottom: 20px; }
+        .stat-box { flex: 1; background: #1a1a1a; padding: 15px; border-radius: 10px; border-top: 3px solid #4CAF50; text-align: center; }
+        .stat-box h3 { margin: 5px 0; font-size: 22px; }
+        .stat-box span { font-size: 10px; color: #666; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* Struttura Albero (Semplificata per Mobile) */
-        .tree-container { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
-        .node { background: #2a2a2a; padding: 12px; border-radius: 8px; border-left: 5px solid #444; position: relative; }
-        .node.male { border-left-color: #3498db; }
-        .node.female { border-left-color: #e91e63; }
-        .node small { color: #666; font-size: 10px; display: block; }
+        /* Struttura Pedigree a "Scaletta" */
+        .pedigree-table { width: 100%; border-collapse: collapse; background: #1a1a1a; border-radius: 10px; overflow: hidden; font-size: 13px; }
+        .pedigree-table td { border: 1px solid #333; padding: 10px; vertical-align: middle; }
         
-        .generation-1 { margin-left: 0px; }
-        .generation-2 { margin-left: 20px; font-size: 0.9em; }
-        .generation-3 { margin-left: 40px; font-size: 0.8em; }
+        .gen-1 { width: 30%; background: #222; font-weight: bold; }
+        .gen-2 { width: 35%; background: #1d1d1d; }
+        .gen-3 { width: 35%; background: #181818; font-size: 11px; }
 
-        .btn-calculate { width: 100%; padding: 15px; background: #4CAF50; border: none; color: white; font-weight: bold; border-radius: 8px; cursor: pointer; margin-top: 20px; }
+        /* Evidenziatore soggetti in comune */
+        .common-ancestor { background: rgba(255, 152, 0, 0.2) !important; border: 1px solid #FF9800 !important; color: #FF9800; font-weight: bold; border-radius: 4px; padding: 2px 5px; }
+        
+        .sex-m { color: #3498db; margin-right: 5px; }
+        .sex-f { color: #e91e63; margin-right: 5px; }
+
+        .legend { margin-top: 15px; font-size: 11px; color: #666; display: flex; gap: 10px; justify-content: center; }
+        .legend-item { display: flex; align-items: center; gap: 5px; }
+        .dot-common { width: 10px; height: 10px; background: #FF9800; border-radius: 2px; }
     </style>
 </head>
 <body>
 
-<div class="header">
-    <h2><i class="fas fa-microscope"></i> Analisi Pedigree</h2>
+<div class="analyzer-header">
+    <span style="color: #FF9800; font-size: 12px; font-weight: bold;">SIMULAZIONE ACCOPPIAMENTO</span>
+    <h2 style="margin: 10px 0;">Roy x Fly</h2>
 </div>
 
-<div class="stats-container">
-    <div class="stat-card" id="coiCard">
-        <h3 id="coiVal">0.0%</h3>
+<div class="stats-grid">
+    <div class="stat-box">
         <span>Inbreeding (COI)</span>
+        <h3 style="color: #FF9800;">6.25%</h3>
     </div>
-    <div class="stat-card">
-        <h3 id="avkVal">100%</h3>
-        <span>Diversità (AVK)</span>
+    <div class="stat-box">
+        <span>Omozigosi (AVK)</span>
+        <h3>87.5%</h3>
     </div>
 </div>
 
-<div class="tree-container">
-    <div class="section-title" style="color:#555; font-size:12px; text-transform:uppercase;">Simulazione Accoppiamento</div>
-    
-    <div class="node male">
-        <small>PADRE</small>
-        <div id="fatherName">Seleziona Stallone...</div>
-    </div>
-    <div class="node female">
-        <small>MADRE</small>
-        <div id="motherName">Seleziona Fattrice...</div>
-    </div>
+<table class="pedigree-table">
+    <tr>
+        <td rowspan="4" class="gen-1"><span class="sex-m">♂</span> Padre: <b>Roy</b></td>
+        <td rowspan="2" class="gen-2"><span class="sex-m">♂</span> Nonno P: <span class="common-ancestor">Moss</span></td>
+        <td class="gen-3"><span class="sex-m">♂</span> Bisnonno: Bob</td>
+    </tr>
+    <tr>
+        <td class="gen-3"><span class="sex-f">♀</span> Bisnonna: Jess</td>
+    </tr>
+    <tr>
+        <td rowspan="2" class="gen-2"><span class="sex-f">♀</span> Nonna P: Meg</td>
+        <td class="gen-3"><span class="sex-m">♂</span> Bisnonno: Cap</td>
+    </tr>
+    <tr>
+        <td class="gen-3"><span class="sex-f">♀</span> Bisnonna: Nell</td>
+    </tr>
 
-    <div class="section-title" style="color:#555; font-size:12px; text-transform:uppercase; margin-top:15px;">Anteprima Linee (2° Gen)</div>
-    <div class="node male generation-2">Paternal Grandfather</div>
-    <div class="node female generation-2">Paternal Grandmother</div>
-    <div class="node male generation-2">Maternal Grandfather</div>
-    <div class="node female generation-2">Maternal Grandmother</div>
+    <tr>
+        <td rowspan="4" class="gen-1"><span class="sex-f">♀</span> Madre: <b>Fly</b></td>
+        <td rowspan="2" class="gen-2"><span class="sex-m">♂</span> Nonno M: Spot</td>
+        <td class="gen-3"><span class="sex-m">♂</span> Bisnonno: <span class="common-ancestor">Moss</span></td>
+    </tr>
+    <tr>
+        <td class="gen-3"><span class="sex-f">♀</span> Bisnonna: Lady</td>
+    </tr>
+    <tr>
+        <td rowspan="2" class="gen-2"><span class="sex-f">♀</span> Nonna M: Gyp</td>
+        <td class="gen-3"><span class="sex-m">♂</span> Bisnonno: Don</td>
+    </tr>
+    <tr>
+        <td class="gen-3"><span class="sex-f">♀</span> Bisnonna: Tess</td>
+    </tr>
+</table>
+
+<div class="legend">
+    <div class="legend-item"><div class="dot-common"></div> Soggetto in comune (Inbreeding)</div>
 </div>
-
-<button class="btn-calculate" onclick="calculateGenetic()">CALCOLA COEFFICIENTI</button>
-
-<script>
-    function calculateGenetic() {
-        // Logica finta per la bozza
-        const coi = (Math.random() * 15).toFixed(1);
-        const avk = (80 + Math.random() * 20).toFixed(1);
-        
-        document.getElementById('coiVal').innerText = coi + "%";
-        document.getElementById('avkVal').innerText = avk + "%";
-        
-        if(coi > 10) {
-            document.getElementById('coiCard').classList.add('high-risk');
-        } else {
-            document.getElementById('coiCard').classList.remove('high-risk');
-        }
-    }
-</script>
 
 </body>
 </html>
