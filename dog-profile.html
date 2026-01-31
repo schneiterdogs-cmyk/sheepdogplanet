@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Profilo Cane - Sheepdog DB</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #111; color: white; margin: 0; padding: 0; }
+        
+        /* Copertina e Foto */
+        .hero { position: relative; height: 300px; background: #222; overflow: hidden; }
+        .hero img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; }
+        .badge-status { position: absolute; top: 20px; right: 20px; background: #FF9800; color: black; padding: 8px 15px; border-radius: 20px; font-weight: bold; font-size: 12px; }
+
+        /* Contenitore Info */
+        .main-content { padding: 20px; margin-top: -40px; position: relative; background: #111; border-radius: 30px 30px 0 0; }
+        
+        .dog-header { margin-bottom: 25px; }
+        .dog-header h1 { margin: 0; font-size: 28px; }
+        .dog-header p { color: #888; margin: 5px 0; }
+
+        /* Griglia Dati Tecnici */
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px; }
+        .info-card { background: #1a1a1a; padding: 15px; border-radius: 12px; border: 1px solid #333; }
+        .info-card small { color: #555; font-size: 10px; text-transform: uppercase; display: block; margin-bottom: 5px; }
+        .info-card span { font-weight: bold; font-size: 14px; color: #ddd; }
+
+        /* Pedigree Preview */
+        .pedigree-preview { background: #1a1a1a; padding: 20px; border-radius: 15px; border: 1px solid #333; margin-bottom: 30px; }
+        .pedigree-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .pedigree-header h3 { margin: 0; font-size: 16px; color: #4CAF50; }
+
+        /* Tasto Contatto */
+        .contact-bar { position: fixed; bottom: 0; left: 0; right: 0; padding: 20px; background: rgba(17, 17, 17, 0.95); border-top: 1px solid #333; display: flex; gap: 10px; }
+        .btn-wa { flex: 1; background: #25D366; color: white; text-align: center; padding: 15px; border-radius: 10px; text-decoration: none; font-weight: bold; }
+        .btn-mail { background: #333; color: white; padding: 15px; border-radius: 10px; text-decoration: none; }
+    </style>
+</head>
+<body>
+
+<div class="hero">
+    <img src="https://images.unsplash.com/photo-1554992228-5683938531d0?q=80&w=1000&auto=format&fit=crop" alt="Border Collie">
+    <div class="badge-status">IN VENDITA</div>
+</div>
+
+<div class="main-content">
+    <div class="dog-header">
+        <h1>Glen Sheepdog "Roy"</h1>
+        <p><i class="fas fa-map-marker-alt"></i> Allevamento del Colle - Toscana, IT</p>
+    </div>
+
+    <div class="info-grid">
+        <div class="info-card">
+            <small>Registro ISDS</small>
+            <span>IT/354210</span>
+        </div>
+        <div class="info-card">
+            <small>Microchip</small>
+            <span>380094100...</span>
+        </div>
+        <div class="info-card">
+            <small>Sesso</small>
+            <span>Maschio (Stallone)</span>
+        </div>
+        <div class="info-card">
+            <small>Data di Nascita</small>
+            <span>12/03/2022</span>
+        </div>
+    </div>
+
+    <div class="pedigree-preview">
+        <div class="pedigree-header">
+            <h3><i class="fas fa-sitemap"></i> Pedigree 3 Generazioni</h3>
+            <a href="#" style="color: #888; font-size: 12px; text-decoration: none;">Vedi Analisi COI →</a>
+        </div>
+        <div style="color: #444; font-style: italic; font-size: 13px;">
+            Caricamento albero genealogico...
+        </div>
+    </div>
+    
+    <div style="height: 100px;"></div> </div>
+
+<div class="contact-bar">
+    <a href="https://wa.me/3912345678" class="btn-wa"><i class="fab fa-whatsapp"></i> CONTATTA PROPRIETARIO</a>
+    <a href="mailto:info@allevamento.it" class="btn-mail"><i class="far fa-envelope"></i></a>
+</div>
+
+</body>
+</html>
