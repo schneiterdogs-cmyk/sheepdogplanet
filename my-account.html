@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Account & Subscription - Sheepdog DB</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #0f0f0f; color: white; margin: 0; padding: 15px; }
+        .container { max-width: 500px; margin: 0 auto; }
+        
+        /* Card Abbonamento */
+        .subscription-card { 
+            background: linear-gradient(135deg, #1a1a1a 0%, #252525 100%); 
+            padding: 20px; border-radius: 20px; border: 1px solid #333; 
+            margin-bottom: 25px; position: relative; overflow: hidden;
+        }
+        .subscription-card.pro { border-left: 5px solid #FF9800; }
+        
+        .plan-header { display: flex; justify-content: space-between; align-items: flex-start; }
+        .plan-title { font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+        .plan-name { font-size: 24px; font-weight: bold; margin-top: 5px; display: block; }
+        
+        .status-pill { background: rgba(76, 175, 80, 0.2); color: #4CAF50; padding: 4px 10px; border-radius: 10px; font-size: 11px; font-weight: bold; }
+        
+        .plan-features { margin-top: 15px; list-style: none; padding: 0; font-size: 13px; color: #bbb; }
+        .plan-features li { margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+        .plan-features i { color: #FF9800; font-size: 10px; }
+
+        /* Lucchetto per utenti FREE */
+        .locked-feature { background: #111; border: 1px dashed #444; padding: 15px; border-radius: 12px; text-align: center; margin-top: 10px; }
+        .locked-feature i { color: #FF9800; margin-bottom: 10px; display: block; font-size: 20px; }
+        .btn-upgrade { display: inline-block; background: #FF9800; color: black; padding: 10px 20px; border-radius: 8px; font-weight: bold; text-decoration: none; margin-top: 10px; font-size: 14px; }
+
+        /* Form Sezioni */
+        .form-section { background: #1a1a1a; padding: 20px; border-radius: 20px; border: 1px solid #333; margin-bottom: 20px; }
+        .form-section h3 { margin: 0 0 15px 0; font-size: 13px; color: #FF9800; text-transform: uppercase; }
+        
+        .input-box { margin-bottom: 15px; }
+        .input-box label { display: block; font-size: 12px; color: #666; margin-bottom: 5px; }
+        .input-box input { width: 100%; padding: 12px; background: #222; border: 1px solid #444; color: white; border-radius: 10px; box-sizing: border-box; }
+
+        .btn-save { width: 100%; padding: 16px; background: #333; border: none; color: white; font-weight: bold; border-radius: 12px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    
+    <div class="subscription-card pro">
+        <div class="plan-header">
+            <div>
+                <span class="plan-title">Il tuo piano attuale</span>
+                <span class="plan-name">Abbonamento PRO</span>
+            </div>
+            <span class="status-pill">ATTIVO</span>
+        </div>
+        
+        <ul class="plan-features">
+            <li><i class="fas fa-check"></i> Pedigree illimitati con COI</li>
+            <li><i class="fas fa-check"></i> QR Code scaricabili per ogni cane</li>
+            <li><i class="fas fa-check"></i> Vetrina Marketplace attiva</li>
+        </ul>
+        
+        <div style="margin-top: 20px; font-size: 12px; color: #666; display: flex; justify-content: space-between; align-items: center;">
+            <span>Prossimo rinnovo: 12/03/2026</span>
+            <a href="#" style="color: #FF9800; text-decoration: none; font-weight: bold;">Gestisci pagamento</a>
+        </div>
+    </div>
+
+    <form>
+        <div class="form-section">
+            <h3>Profilo Allevatore</h3>
+            <div class="input-box">
+                <label>Nome Completo / Responsabile</label>
+                <input type="text" value="Mario Rossi">
+            </div>
+            <div class="input-box">
+                <label>Nome Allevamento</label>
+                <input type="text" value="Glen Sheepdogs">
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h3>Contatti Pubblici</h3>
+            <div class="input-box">
+                <label>WhatsApp (per i clienti)</label>
+                <input type="tel" value="+39 333 1234567">
+            </div>
+            <div class="input-box">
+                <label>Sito Web o Facebook</label>
+                <input type="url" value="https://www.glensheepdogs.it">
+            </div>
+        </div>
+
+        <button type="button" class="btn-save">AGGIORNA PROFILO</button>
+        
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="#" style="color: #f44336; font-size: 13px; text-decoration: none; font-weight: bold;">DISDICI ABBONAMENTO</a>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>
