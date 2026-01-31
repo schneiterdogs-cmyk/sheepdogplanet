@@ -18,23 +18,19 @@
             background: #2a2a2a; border: 1px solid #444; 
             color: white; border-radius: 8px; box-sizing: border-box; outline: none;
         }
-        select { cursor: pointer; border-left: 4px solid #FF9800; }
 
         /* Griglia Genitori */
         .parents-grid { display: flex; gap: 15px; margin-top: 10px; }
-        .parent-box { flex: 1; position: relative; background: #2a2a2a; padding: 10px; border-radius: 10px; border: 1px solid #333; }
+        .parent-box { flex: 1; position: relative; background: #2a2a2a; padding: 12px; border-radius: 10px; border: 1px solid #333; }
         
-        .parent-box.father { border-bottom: 3px solid #3498db; }
-        .parent-box.mother { border-bottom: 3px solid #e91e63; }
+        .parent-box.father { border-left: 4px solid #3498db; }
+        .parent-box.mother { border-left: 4px solid #e91e63; }
 
-        /* Risultati e Add New */
-        .search-results {
-            background: #333; border-radius: 0 0 8px 8px; margin-top: 5px; display: none;
-        }
+        /* Tasto Add New */
         .add-new-btn { 
-            display: block; padding: 12px; background: rgba(255, 152, 0, 0.1); 
+            display: block; padding: 10px; background: rgba(255, 152, 0, 0.05); 
             color: #FF9800; border: 1px dashed #FF9800; text-decoration: none;
-            text-align: center; font-size: 12px; border-radius: 8px; margin-top: 10px;
+            text-align: center; font-size: 11px; border-radius: 6px; margin-top: 10px;
         }
 
         /* Tasti Finale */
@@ -46,26 +42,26 @@
 <body>
 
 <div class="container">
-    <h2><i class="fas fa-calendar-alt"></i> Gestione Cucciolata</h2>
+    <h2><i class="fas fa-layer-group"></i> Gestione Cucciolata</h2>
     
     <form id="litterForm">
         
-        <div class="section-title">Stato della Cucciolata</div>
+        <div class="section-title">Stato Attuale</div>
         <label>Tipo di Evento</label>
         <select id="litterStatus" onchange="updateDateLabel()">
-            <option value="planned">In Programma (Accoppiamento previsto)</option>
-            <option value="mated">Monta Effettuata (In attesa)</option>
+            <option value="planned">Cucciolata in Programma</option>
+            <option value="mated">Monta Effettuata</option>
             <option value="born">Cuccioli Nati</option>
         </select>
 
-        <label id="dateLabel">Data Prevista / Evento</label>
+        <label id="dateLabel">Data dell'evento</label>
         <input type="date" required>
 
         <div class="section-title">Genitori</div>
         <div class="parents-grid">
             <div class="parent-box father">
                 <label><i class="fas fa-mars"></i> Padre</label>
-                <input type="text" id="fatherInput" placeholder="Cerca nome o ISDS..." onkeyup="showAddBtn('father')">
+                <input type="text" id="fatherInput" placeholder="Cerca..." onkeyup="showAddBtn('father')">
                 <div id="fatherResults">
                     <a href="register-dog.html" class="add-new-btn" id="addFatherBtn" style="display:none;">
                         <i class="fas fa-plus"></i> Registra nuovo Padre
@@ -75,7 +71,7 @@
 
             <div class="parent-box mother">
                 <label><i class="fas fa-venus"></i> Madre</label>
-                <input type="text" id="motherInput" placeholder="Cerca nome o ISDS..." onkeyup="showAddBtn('mother')">
+                <input type="text" id="motherInput" placeholder="Cerca..." onkeyup="showAddBtn('mother')">
                 <div id="motherResults">
                     <a href="register-dog.html" class="add-new-btn" id="addMotherBtn" style="display:none;">
                         <i class="fas fa-plus"></i> Registra nuova Madre
@@ -83,9 +79,6 @@
                 </div>
             </div>
         </div>
-
-        <label>Note (opzionale)</label>
-        <input type="text" placeholder="Es: Linea da lavoro, alta genealogia...">
 
         <div class="footer-btns">
             <button type="button" class="btn-cancel" onclick="window.history.back()">ANNULLA</button>
@@ -95,26 +88,24 @@
 </div>
 
 <script>
-    // Cambia il testo della data in base allo stato
-    function updateDateLabel() {
-        const status = document.getElementById('litterStatus').value;
-        const label = document.getElementById('dateLabel');
-        
-        if(status === 'planned') label.innerText = "Data prevista accoppiamento";
-        if(status === 'mated') label.innerText = "Data della monta effettuata";
-        if(status === 'born') label.innerText = "Data di nascita cuccioli";
-    }
-
-    // Mostra il tasto "Aggiungi" se l'utente scrive qualcosa
+    // Funzione per mostrare il tasto "Aggiungi" solo se l'utente inizia a scrivere
     function showAddBtn(type) {
         const input = document.getElementById(type + 'Input');
         const btn = document.getElementById('add' + type.charAt(0).toUpperCase() + type.slice(1) + 'Btn');
         
-        if(input.value.length > 2) {
+        if(input.value.length > 1) {
             btn.style.display = 'block';
         } else {
             btn.style.display = 'none';
         }
+    }
+
+    // Cambia il testo della label data dinamicamente
+    function updateDateLabel() {
+        const status = document.getElementById('litterStatus').value;
+        const label = document.getElementById('dateLabel');
+        if(status === 'born') label.innerText = "Data di nascita";
+        else label.innerText = "Data della monta / evento";
     }
 </script>
 
