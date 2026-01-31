@@ -1,105 +1,318 @@
 <!DOCTYPE html>
-<html>
+<html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Account & Subscription - Sheepdog DB</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account - Sheepdog DB</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #0f0f0f; color: white; margin: 0; padding: 15px; }
-        .container { max-width: 500px; margin: 0 auto; }
-        
-        /* Card Abbonamento */
-        .subscription-card { 
-            background: linear-gradient(135deg, #1a1a1a 0%, #252525 100%); 
-            padding: 20px; border-radius: 20px; border: 1px solid #333; 
-            margin-bottom: 25px; position: relative; overflow: hidden;
+        :root {
+            --primary: #FF9800;
+            --bg: #0f0f0f;
+            --card-bg: #1a1a1a;
+            --input-bg: #222;
+            --text-main: #ffffff;
+            --text-dim: #888;
+            --danger: #f44336;
+            --success: #4CAF50;
         }
-        .subscription-card.pro { border-left: 5px solid #FF9800; }
-        
-        .plan-header { display: flex; justify-content: space-between; align-items: flex-start; }
-        .plan-title { font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 1px; }
-        .plan-name { font-size: 24px; font-weight: bold; margin-top: 5px; display: block; }
-        
-        .status-pill { background: rgba(76, 175, 80, 0.2); color: #4CAF50; padding: 4px 10px; border-radius: 10px; font-size: 11px; font-weight: bold; }
-        
-        .plan-features { margin-top: 15px; list-style: none; padding: 0; font-size: 13px; color: #bbb; }
-        .plan-features li { margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
-        .plan-features i { color: #FF9800; font-size: 10px; }
 
-        /* Lucchetto per utenti FREE */
-        .locked-feature { background: #111; border: 1px dashed #444; padding: 15px; border-radius: 12px; text-align: center; margin-top: 10px; }
-        .locked-feature i { color: #FF9800; margin-bottom: 10px; display: block; font-size: 20px; }
-        .btn-upgrade { display: inline-block; background: #FF9800; color: black; padding: 10px 20px; border-radius: 8px; font-weight: bold; text-decoration: none; margin-top: 10px; font-size: 14px; }
+        body {
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            padding-bottom: 50px;
+        }
 
-        /* Form Sezioni */
-        .form-section { background: #1a1a1a; padding: 20px; border-radius: 20px; border: 1px solid #333; margin-bottom: 20px; }
-        .form-section h3 { margin: 0 0 15px 0; font-size: 13px; color: #FF9800; text-transform: uppercase; }
-        
-        .input-box { margin-bottom: 15px; }
-        .input-box label { display: block; font-size: 12px; color: #666; margin-bottom: 5px; }
-        .input-box input { width: 100%; padding: 12px; background: #222; border: 1px solid #444; color: white; border-radius: 10px; box-sizing: border-box; }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+        }
 
-        .btn-save { width: 100%; padding: 16px; background: #333; border: none; color: white; font-weight: bold; border-radius: 12px; cursor: pointer; }
+        /* --- HEADER PROFILO --- */
+        .profile-header {
+            text-align: center;
+            padding: 20px 0 30px;
+        }
+
+        .avatar-wrapper {
+            position: relative;
+            width: 110px;
+            height: 110px;
+            margin: 0 auto 15px;
+        }
+
+        .avatar-wrapper img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 3px solid var(--primary);
+            object-fit: cover;
+            box-shadow: 0 0 20px rgba(255, 152, 0, 0.2);
+        }
+
+        .edit-badge {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background: var(--primary);
+            color: black;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid var(--bg);
+            cursor: pointer;
+        }
+
+        /* --- SEZIONE ABBONAMENTO --- */
+        .sub-card {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            border-radius: 20px;
+            padding: 20px;
+            border: 1px solid #333;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .sub-card.pro { border-left: 5px solid var(--primary); }
+
+        .sub-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .status-badge {
+            background: rgba(76, 175, 80, 0.15);
+            color: var(--success);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .feature-list {
+            margin: 15px 0;
+            padding: 0;
+            list-style: none;
+            font-size: 13px;
+        }
+
+        .feature-list li {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #bbb;
+        }
+
+        .feature-list i { color: var(--primary); font-size: 12px; }
+
+        .lock-overlay {
+            background: rgba(0,0,0,0.6);
+            border: 1px dashed #444;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        /* --- FORM --- */
+        .form-group {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 20px;
+            border: 1px solid #333;
+            margin-bottom: 20px;
+        }
+
+        .form-group h3 {
+            margin: 0 0 20px 0;
+            font-size: 14px;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .input-item { margin-bottom: 15px; }
+        .input-item label { display: block; font-size: 12px; color: var(--text-dim); margin-bottom: 8px; }
+        .input-item input {
+            width: 100%;
+            padding: 14px;
+            background: var(--input-bg);
+            border: 1px solid #444;
+            border-radius: 12px;
+            color: white;
+            font-size: 15px;
+            box-sizing: border-box;
+            transition: 0.3s;
+        }
+
+        .input-item input:focus { border-color: var(--primary); outline: none; }
+
+        /* --- BOTTONI --- */
+        .btn-main {
+            width: 100%;
+            padding: 18px;
+            background: var(--primary);
+            color: black;
+            border: none;
+            border-radius: 15px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 10px 20px rgba(255, 152, 0, 0.2);
+        }
+
+        .btn-outline {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 14px;
+            background: transparent;
+            border: 1px solid #333;
+            color: white;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .logout-link {
+            display: block;
+            text-align: center;
+            margin-top: 30px;
+            color: var(--danger);
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        /* Toast Notification */
+        #toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--success);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: bold;
+            display: none;
+            z-index: 1000;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
     </style>
 </head>
 <body>
 
+<div id="toast">Profilo Aggiornato! ✅</div>
+
 <div class="container">
     
-    <div class="subscription-card pro">
-        <div class="plan-header">
+    <div class="profile-header">
+        <div class="avatar-wrapper">
+            <img src="https://via.placeholder.com/150" alt="Logo Allevamento">
+            <div class="edit-badge"><i class="fas fa-pen"></i></div>
+        </div>
+        <h2 style="margin: 0;">Mario Rossi</h2>
+        <p style="color: var(--text-dim); font-size: 14px;">Glen Sheepdogs</p>
+    </div>
+
+    <div class="sub-card pro">
+        <div class="sub-header">
             <div>
-                <span class="plan-title">Il tuo piano attuale</span>
-                <span class="plan-name">Abbonamento PRO</span>
+                <span style="font-size: 11px; color: var(--text-dim); text-transform: uppercase;">Abbonamento</span>
+                <div style="font-size: 20px; font-weight: bold;">Piano PRO</div>
             </div>
-            <span class="status-pill">ATTIVO</span>
+            <span class="status-badge">Attivo</span>
         </div>
         
-        <ul class="plan-features">
-            <li><i class="fas fa-check"></i> Pedigree illimitati con COI</li>
-            <li><i class="fas fa-check"></i> QR Code scaricabili per ogni cane</li>
-            <li><i class="fas fa-check"></i> Vetrina Marketplace attiva</li>
+        <ul class="feature-list">
+            <li><i class="fas fa-check-circle"></i> Calcolo COI e AVK illimitato</li>
+            <li><i class="fas fa-check-circle"></i> Download QR Code Pedigree</li>
+            <li><i class="fas fa-check-circle"></i> Vetrina Marketplace attiva</li>
         </ul>
-        
-        <div style="margin-top: 20px; font-size: 12px; color: #666; display: flex; justify-content: space-between; align-items: center;">
-            <span>Prossimo rinnovo: 12/03/2026</span>
-            <a href="#" style="color: #FF9800; text-decoration: none; font-weight: bold;">Gestisci pagamento</a>
+
+        <div style="margin-top: 15px; font-size: 12px; color: var(--text-dim); display: flex; justify-content: space-between;">
+            <span>Scadenza: 15 Maggio 2026</span>
+            <a href="#" style="color: var(--primary); text-decoration: none; font-weight: bold;">Rinnova</a>
         </div>
     </div>
 
-    <form>
-        <div class="form-section">
-            <h3>Profilo Allevatore</h3>
-            <div class="input-box">
-                <label>Nome Completo / Responsabile</label>
-                <input type="text" value="Mario Rossi">
-            </div>
-            <div class="input-box">
-                <label>Nome Allevamento</label>
+    <form id="accountForm">
+        <div class="form-group">
+            <h3>Dati Allevamento</h3>
+            <div class="input-item">
+                <label>Nome Allevamento / Affisso</label>
                 <input type="text" value="Glen Sheepdogs">
             </div>
-        </div>
-
-        <div class="form-section">
-            <h3>Contatti Pubblici</h3>
-            <div class="input-box">
-                <label>WhatsApp (per i clienti)</label>
-                <input type="tel" value="+39 333 1234567">
-            </div>
-            <div class="input-box">
-                <label>Sito Web o Facebook</label>
+            <div class="input-item">
+                <label>Sito Web</label>
                 <input type="url" value="https://www.glensheepdogs.it">
             </div>
+            <div class="input-item">
+                <label>Località</label>
+                <input type="text" value="Arezzo, IT">
+            </div>
         </div>
 
-        <button type="button" class="btn-save">AGGIORNA PROFILO</button>
-        
-        <div style="text-align: center; margin-top: 30px;">
-            <a href="#" style="color: #f44336; font-size: 13px; text-decoration: none; font-weight: bold;">DISDICI ABBONAMENTO</a>
+        <div class="form-group">
+            <h3>Contatti Pubblici</h3>
+            <div class="input-item">
+                <label>WhatsApp</label>
+                <input type="tel" value="+39 333 1234567">
+            </div>
+            <div class="input-item">
+                <label>Email Pubblica</label>
+                <input type="email" value="info@glensheepdogs.it">
+            </div>
         </div>
+
+        <button type="button" class="btn-main" onclick="showSuccess()">
+            <i class="fas fa-save"></i> SALVA MODIFICHE
+        </button>
     </form>
+
+    <div style="margin-top: 20px;">
+        <a href="index.html" class="btn-outline">
+            <i class="fas fa-th-large"></i> Torna alla Dashboard
+        </a>
+        <a href="my-dogs.html" class="btn-outline">
+            <i class="fas fa-paw"></i> Gestisci i miei Cani
+        </a>
+    </div>
+
+    <a href="#" class="logout-link" onclick="confirm('Vuoi uscire?')">LOGOUT ACCOUNT</a>
+
 </div>
+
+<script>
+    function showSuccess() {
+        const toast = document.getElementById('toast');
+        toast.style.display = 'block';
+        
+        // Simula il salvataggio
+        setTimeout(() => {
+            toast.style.display = 'none';
+        }, 3000);
+    }
+</script>
 
 </body>
 </html>
