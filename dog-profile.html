@@ -2,135 +2,132 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Pedigree Builder PRO - Sheepdog DB</title>
+    <title>Profilo Cane - Sheepdog DB</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #111; color: white; margin: 0; padding: 15px; }
+        body { font-family: 'Segoe UI', sans-serif; background: #111; color: white; margin: 0; padding: 0; }
         
-        /* Box Selezione Iniziale */
-        .selection-panel { background: #1a1a1a; padding: 20px; border-radius: 15px; border: 1px solid #333; margin-bottom: 20px; }
-        .inputs-row { display: flex; gap: 15px; margin-bottom: 20px; }
-        .input-group { flex: 1; }
-        .input-group label { display: block; font-size: 11px; color: #888; text-transform: uppercase; margin-bottom: 5px; }
-        input { width: 100%; padding: 12px; background: #2a2a2a; border: 1px solid #444; color: white; border-radius: 8px; box-sizing: border-box; }
+        /* Copertina e Foto */
+        .hero { position: relative; height: 320px; background: #222; overflow: hidden; }
+        .hero img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; }
+        
+        /* Badge Stato (Vendita/Stallone) */
+        .badge-status { position: absolute; top: 20px; left: 20px; background: #FF9800; color: black; padding: 8px 15px; border-radius: 20px; font-weight: bold; font-size: 12px; z-index: 10; }
 
-        .btn-calc { 
-            width: 100%; padding: 18px; background: #FF9800; border: none; color: black; 
-            font-weight: bold; border-radius: 10px; cursor: pointer; font-size: 16px;
-            transition: 0.3s; box-shadow: 0 4px 15px rgba(255, 152, 0, 0.3);
+        /* Tasto CUORE (Preferiti) */
+        .btn-fav { 
+            position: absolute; top: 20px; right: 20px; 
+            background: rgba(0,0,0,0.5); color: white; 
+            width: 45px; height: 45px; border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; 
+            font-size: 20px; cursor: pointer; border: 1px solid rgba(255,255,255,0.2);
+            transition: 0.3s; z-index: 10; backdrop-filter: blur(5px);
         }
-        .btn-calc:active { transform: scale(0.98); }
+        .btn-fav.active { color: #e91e63; background: white; border-color: white; }
+        .btn-fav:active { transform: scale(0.9); }
 
-        /* Area Risultati (Nascosta all'inizio) */
-        #resultArea { display: none; animation: fadeIn 0.6s ease; }
+        /* Contenitore Info */
+        .main-content { padding: 20px; margin-top: -40px; position: relative; background: #111; border-radius: 30px 30px 0 0; }
+        
+        .dog-header { margin-bottom: 25px; }
+        .dog-header h1 { margin: 0; font-size: 28px; letter-spacing: -0.5px; }
+        .dog-header p { color: #888; margin: 5px 0; font-size: 14px; }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        /* Griglia Dati Tecnici */
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 30px; }
+        .info-card { background: #1a1a1a; padding: 15px; border-radius: 12px; border: 1px solid #333; }
+        .info-card small { color: #555; font-size: 10px; text-transform: uppercase; display: block; margin-bottom: 5px; letter-spacing: 0.5px; }
+        .info-card span { font-weight: bold; font-size: 14px; color: #ddd; }
 
-        .stats-grid { display: flex; gap: 10px; margin: 20px 0; }
-        .stat-box { flex: 1; background: #222; padding: 15px; border-radius: 12px; text-align: center; border-top: 4px solid #4CAF50; }
-        .stat-box.warning { border-top-color: #f44336; }
-        .stat-box h3 { margin: 5px 0; font-size: 24px; }
-        .stat-box span { font-size: 10px; color: #666; text-transform: uppercase; }
+        /* Pedigree Preview */
+        .pedigree-preview { background: #1a1a1a; padding: 20px; border-radius: 15px; border: 1px solid #333; margin-bottom: 30px; }
+        .pedigree-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .pedigree-header h3 { margin: 0; font-size: 15px; color: #4CAF50; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* La Tabella a Scaletta che ti piaceva */
-        .pedigree-table { width: 100%; border-collapse: collapse; background: #1a1a1a; border-radius: 10px; overflow: hidden; font-size: 12px; border: 1px solid #333; }
-        .pedigree-table td { border: 1px solid #333; padding: 8px; vertical-align: middle; }
-        .gen-1 { background: #222; font-weight: bold; width: 30%; color: #FF9800; }
-        .gen-2 { background: #1d1d1d; width: 35%; }
-        .gen-3 { background: #181818; width: 35%; font-size: 10px; color: #aaa; }
-
-        /* Evidenziatore cani in comune */
-        .common-name { background: rgba(255, 152, 0, 0.15); color: #FF9800; border: 1px solid #FF9800; padding: 2px 4px; border-radius: 3px; font-weight: bold; }
+        /* Tasto Contatto */
+        .contact-bar { position: fixed; bottom: 0; left: 0; right: 0; padding: 20px; background: rgba(17, 17, 17, 0.95); border-top: 1px solid #333; display: flex; gap: 10px; z-index: 100; }
+        .btn-wa { flex: 1; background: #25D366; color: white; text-align: center; padding: 16px; border-radius: 12px; text-decoration: none; font-weight: bold; font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-mail { background: #333; color: white; padding: 16px; border-radius: 12px; text-decoration: none; width: 55px; display: flex; align-items: center; justify-content: center; }
+        
     </style>
 </head>
 <body>
 
-    <div class="selection-panel">
-        <h3 style="margin-top:0; font-size: 16px;"><i class="fas fa-flask"></i> Simulatore Accoppiamento</h3>
-        <div class="inputs-row">
-            <div class="input-group">
-                <label>ID o Nome Padre</label>
-                <input type="text" id="fatherIn" placeholder="Es: Roy">
-            </div>
-            <div class="input-group">
-                <label>ID o Nome Madre</label>
-                <input type="text" id="motherIn" placeholder="Es: Fly">
-            </div>
-        </div>
-        <button class="btn-calc" onclick="showPedigree()">CALCOLA PEDIGREE & COI</button>
+<div class="hero">
+    <div class="badge-status"><i class="fas fa-tag"></i> IN VENDITA</div>
+    
+    <div class="btn-fav" id="favHeart" onclick="toggleFav()">
+        <i class="far fa-heart"></i>
     </div>
 
-    <div id="resultArea">
-        <div class="stats-grid">
-            <div class="stat-box warning">
-                <span>Inbreeding (COI)</span>
-                <h3 id="coiVal">12.5%</h3>
-            </div>
-            <div class="stat-box">
-                <span>Diversità (AVK)</span>
-                <h3 id="avkVal">92.8%</h3>
-            </div>
-        </div>
+    <img src="https://images.unsplash.com/photo-1554992228-5683938531d0?q=80&w=1000&auto=format&fit=crop" alt="Border Collie">
+</div>
 
-        <table class="pedigree-table">
-            <tr>
-                <td rowspan="4" class="gen-1">♂ <span id="resFather">Roy</span></td>
-                <td rowspan="2" class="gen-2">♂ <span class="common-name">Moss</span></td>
-                <td class="gen-3">♂ Bob</td>
-            </tr>
-            <tr>
-                <td class="gen-3">♀ Jess</td>
-            </tr>
-            <tr>
-                <td rowspan="2" class="gen-2">♀ Meg</td>
-                <td class="gen-3">♂ Cap</td>
-            </tr>
-            <tr>
-                <td class="gen-3">♀ Nell</td>
-            </tr>
-            <tr>
-                <td rowspan="4" class="gen-1">♀ <span id="resMother">Fly</span></td>
-                <td rowspan="2" class="gen-2">♂ Don</td>
-                <td class="gen-3">♂ <span class="common-name">Moss</span></td>
-            </tr>
-            <tr>
-                <td class="gen-3">♀ Lady</td>
-            </tr>
-            <tr>
-                <td rowspan="2" class="gen-2">♀ Gyp</td>
-                <td class="gen-3">♂ Sid</td>
-            </tr>
-            <tr>
-                <td class="gen-3">♀ Tess</td>
-            </tr>
-        </table>
+<div class="main-content">
+    <div class="dog-header">
+        <h1>Glen Sheepdog "Roy"</h1>
+        <p><i class="fas fa-map-marker-alt"></i> Allevamento del Colle - Toscana, IT</p>
+    </div>
+
+    <div class="info-grid">
+        <div class="info-card">
+            <small>Registro ISDS</small>
+            <span>IT/354210</span>
+        </div>
+        <div class="info-card">
+            <small>Sesso</small>
+            <span>Maschio (Stallone)</span>
+        </div>
+        <div class="info-card">
+            <small>Microchip</small>
+            <span>380094100...</span>
+        </div>
+        <div class="info-card">
+            <small>Nascita</small>
+            <span>12/03/2022</span>
+        </div>
+    </div>
+
+    <div class="pedigree-preview">
+        <div class="pedigree-header">
+            <h3><i class="fas fa-sitemap"></i> Pedigree</h3>
+            <a href="pedigree-builder.html" style="color: #FF9800; font-size: 12px; text-decoration: none; font-weight: bold;">ANALISI COI →</a>
+        </div>
+        <div style="color: #444; font-style: italic; font-size: 13px; text-align: center; padding: 10px;">
+            <i class="fas fa-spinner fa-spin"></i> Generazione albero...
+        </div>
+    </div>
+    
+    <div style="height: 100px;"></div>
+</div>
+
+<div class="contact-bar">
+    <a href="https://wa.me/3912345678" class="btn-wa">
+        <i class="fab fa-whatsapp"></i> WHATSAPP
+    </a>
+    <a href="mailto:info@allevamento.it" class="btn-mail">
+        <i class="far fa-envelope"></i>
+    </a>
+</div>
+
+<script>
+    function toggleFav() {
+        const heart = document.getElementById('favHeart');
+        const icon = heart.querySelector('i');
         
-        <p style="text-align:center; font-size:11px; color:#555; margin-top:15px;">
-            <i class="fas fa-info-circle"></i> I nomi evidenziati in arancione compaiono in entrambi i rami.
-        </p>
-    </div>
-
-    <script>
-        function showPedigree() {
-            // Prende i nomi inseriti
-            const f = document.getElementById('fatherIn').value;
-            const m = document.getElementById('motherIn').value;
-
-            if(!f || !m) {
-                alert("Inserisci sia il padre che la madre!");
-                return;
-            }
-
-            // Simula il caricamento e mostra i risultati
-            document.getElementById('resFather').innerText = f;
-            document.getElementById('resMother').innerText = m;
-            document.getElementById('resultArea').style.display = 'block';
-            
-            // Scroll automatico ai risultati
-            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        heart.classList.toggle('active');
+        
+        if(heart.classList.contains('active')) {
+            icon.classList.remove('far');
+            icon.classList.add('fas');
+            // Qui andrà la logica per salvare l'ID del cane nei preferiti sul database
+        } else {
+            icon.classList.remove('fas');
+            icon.classList.add('far');
         }
-    </script>
+    }
+</script>
 
 </body>
 </html>
